@@ -1,0 +1,35 @@
+{
+    "name": "tomk79/burdock-project-manager",
+    "description": "",
+    "keywords": [],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tomoya Koyanagi",
+            "email": "tomk79@gmail.com"
+        }
+    ],
+    "scripts":{
+        "test": [
+            "php ./vendor/phpunit/phpunit/phpunit"
+        ]
+    } ,
+    "minimum-stability": "dev",
+    "prefer-stable": false,
+    "repositories": [
+    ],
+    "require": {
+        "php": ">=5.4.0" ,
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "tomk79/filesystem": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.1"
+    },
+    "autoload": {
+        "files": [
+            "php/main.php"
+        ]
+    }
+}
