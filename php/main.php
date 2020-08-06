@@ -31,8 +31,8 @@ class main{
 	/**
 	 * Create project object
 	 */
-	public function pj($project_id){
-		$pj = new project($this, $project_id);
+	public function project($project_id){
+		$pj = new project($this, $this->fs, $this->realpath_bd_data, $project_id);
 		return $pj;
 	}
 

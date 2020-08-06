@@ -18,8 +18,15 @@ class mainTest extends PHPUnit_Framework_TestCase{
         $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
 		$this->assertSame( is_object($burdockProjectManager), true );
 
-		$pj = $burdockProjectManager->pj('test_pj_001');
+		$pj = $burdockProjectManager->project('test_pj_fine');
 		$this->assertSame( is_object($pj), true );
+
+		$status = $pj->status('preview', 'master');
+		// var_dump($status);
+		$this->assertSame( is_object($status), true );
+		$this->assertSame( is_object($status->api), true );
+		$this->assertSame( is_object($status->px2dthelper), true );
+		$this->assertSame( $status->pathExists, true );
         return;
 	}
 
