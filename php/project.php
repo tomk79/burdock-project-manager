@@ -87,19 +87,49 @@ class project{
 			$tmp_str_composerJson = file_get_contents($realpath_projectroot_dir.'composer.json');
 			$tmp_obj_composerJson = json_decode( $tmp_str_composerJson );
 			try{
-				if( is_object($tmp_obj_composerJson) && property_exists($tmp_obj_composerJson, 'extra') && property_exists($tmp_obj_composerJson, 'px2package') && $tmp_obj_composerJson->extra->px2package->path ){
+				if( is_object($tmp_obj_composerJson) && property_exists($tmp_obj_composerJson, 'extra') && property_exists($tmp_obj_composerJson->extra, 'px2package') && $tmp_obj_composerJson->extra->px2package->path ){
 					$path_entry_script = $tmp_obj_composerJson->extra->px2package->path;
+				}
+				if( is_object($tmp_obj_composerJson) && property_exists($tmp_obj_composerJson, 'extra') && property_exists($tmp_obj_composerJson->extra, 'px2package') && $tmp_obj_composerJson->extra->px2package->path_homedir ){
+					$path_home_dir = $tmp_obj_composerJson->extra->px2package->path_homedir;
 				}
 			}catch(Exception $e){}
 		}
 
 		$status->entryScriptExists = false;
-		if($status->pathExists && $this->fs->is_file($realpath_projectroot_dir.$path_entry_script)){
+		$status->homeDirExists = false;
+		$status->confFileExists = false;
+		$status->px2DTConfFileExists = false;
+		$status->vendorDirExists = false;
+		$status->isPxStandby = false;
+		$status->gitDirExists = false;
+
+		if( $status->pathExists ){
+			if($this->fs->is_file($realpath_projectroot_dir.$path_entry_script)){
 			$status->entryScriptExists = true;
 		}
-		$status->homeDirExists = false;
-		if($status->pathExists && $this->fs->is_dir($realpath_projectroot_dir.$path_home_dir)){
+
+			if($this->fs->is_dir($realpath_projectroot_dir.$path_home_dir)){
 			$status->homeDirExists = true;
+				if($this->fs->is_file($realpath_projectroot_dir.$path_home_dir.'config.php') || $this->fs->is_file($realpath_projectroot_dir.$path_home_dir.'config.json')){
+					$status->confFileExists = true;
+
+					// TODO: px2dtconfig の評価が未実装
+					// if(typeof(_px2DTConfig) === typeof({})){ status.px2DTConfFileExists = true; }
+				}
+		}
+
+			if($this->fs->is_dir($realpath_projectroot_dir.'/vendor/')){
+				$status->vendorDirExists = true;
+			}
+
+			if( $status->entryScriptExists && $status->homeDirExists && $status->confFileExists && $status->composerJsonExists && $status->vendorDirExists ){
+				$status->isPxStandby = true;
+			}
+	
+			if($this->fs->is_dir($realpath_projectroot_dir.'/.git/')){
+				$status->gitDirExists = true;
+			}
 		}
 
 
