@@ -253,7 +253,7 @@ class project_branch{
 
 		$bin = $io[1]; // stdout
 		if( strlen( $io[2] ) ){
-			$this->error($io[2]); // stderr
+			// $this->error($io[2]); // stderr
 		}
 
 		if( @$options['output'] == 'json' ){
