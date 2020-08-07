@@ -32,7 +32,7 @@ class project{
 	/**
 	 * ブランチオブジェクトを生成
 	 */
-	public function branch( $division, $branch_name ){
+	public function branch( $branch_name, $division = "preview" ){
 		$realpath_projectroot_dir = false;
 		switch( strtolower($division) ){
 			case 'preview':
