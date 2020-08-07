@@ -21,7 +21,7 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$pj = $burdockProjectManager->project('test_pj_fine');
 		$this->assertSame( is_object($pj), true );
 
-		$status = $pj->status('preview', 'master');
+		$status = $pj->branch('preview', 'master')->status();
 		// var_dump($status);
 		$this->assertSame( is_object($status), true );
 		$this->assertSame( is_object($status->api), true );

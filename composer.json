@@ -30,7 +30,8 @@
     "autoload": {
         "files": [
             "php/main.php",
-            "php/project.php"
+            "php/project.php",
+            "php/project_branch.php"
         ]
     }
 }

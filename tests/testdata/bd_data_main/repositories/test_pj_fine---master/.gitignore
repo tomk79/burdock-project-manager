@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+.~*.csv#
+~$*
+!.gitkeep
+vendor/
+#composer.lock
+src_px2/px-files/_sys/ram/
+!src_px2/px-files/_sys/ram/applock/.gitkeep
+!src_px2/px-files/_sys/ram/caches/.gitkeep
+!src_px2/px-files/_sys/ram/data/.gitkeep
+!src_px2/px-files/_sys/ram/publish/.gitkeep
+src_px2/common/px_resources/
+!src_px2/common/px_resources/.gitkeep
