@@ -110,8 +110,8 @@ class project_branch{
 				if($this->main->fs()->is_file($this->realpath_projectroot_dir.$this->path_home_dir.'config.php') || $this->main->fs()->is_file($this->realpath_projectroot_dir.$this->path_home_dir.'config.json')){
 					$status->confFileExists = true;
 
-					// TODO: px2dtconfig の評価が未実装
-					// if(typeof(_px2DTConfig) === typeof({})){ status.px2DTConfFileExists = true; }
+					// ここでは初期化だけ。configをロードしたあとでセットする
+					$status->px2DTConfFileExists = false;
 				}
 			}
 
@@ -129,9 +129,38 @@ class project_branch{
 		}
 
 
-		$rtn = $this->execute_px2('/?PX=px2dthelper.get.all', array(
+		$pjInfo = $this->execute_px2('/?PX=px2dthelper.get.all', array(
 			'output' => 'json',
 		));
+		// var_dump($pjInfo);
+
+		$status->api->version = $pjInfo->check_status->pxfw_api->version;
+		$status->api->available = ($pjInfo->check_status->pxfw_api->version ? true : false);
+		$status->api->is_sitemap_loaded = $pjInfo->check_status->pxfw_api->is_sitemap_loaded;
+
+		$status->px2dthelper->version = $pjInfo->check_status->px2dthelper->version;
+		$status->px2dthelper->available = ($pjInfo->check_status->px2dthelper->version ? true : false);
+		$status->px2dthelper->is_sitemap_loaded = $pjInfo->check_status->px2dthelper->is_sitemap_loaded;
+
+
+		$_config = $pjInfo->config;
+		$_px2DTConfig = false;
+		if( $_config->plugins && $_config->plugins->px2dt ){
+			$_px2DTConfig = $_config->plugins->px2dt;
+			$status->px2DTConfFileExists = true;
+		}
+
+		$status->guiEngineName = 'broccoli-html-editor';
+
+		if( $_config && $_config->plugins && $_config->plugins->px2dt && $_config->plugins->px2dt->guiEngine ){
+			switch($_config->plugins->px2dt->guiEngine){
+				case 'broccoli-html-editor-php':
+					$status->guiEngineName = 'broccoli-html-editor-php';
+					break;
+				default:
+					break;
+			}
+		}
 
 		return $status;
 	}
