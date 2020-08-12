@@ -179,89 +179,13 @@ class project_branch{
 	 *
 	 * サブリクエストから標準エラー出力を検出した場合、 `$px->error( $stderr )` に転送します。
 	 */
-	private function execute_px2($request_path, $options = null, &$return_var = null){
+	private function execute_px2($request_path, $options = null){
 		if( !strlen($this->path_entry_script) ){
 			$this->status();
 		}
-		$path_cmd_php = $this->main->conf('php');
-		$path_cmd_php_ini = $this->main->conf('php_ini');
-
-		$current_dir = realpath('.');
-		$project_dir = dirname($this->realpath_projectroot_dir);
-
-
-		if(!is_string($request_path)){
-			$this->error('Invalid argument supplied for 1st option $request_path in $px->internal_sub_request(). It required String value.');
-			return false;
-		}
-		if(!strlen($request_path)){ $request_path = '/'; }
-		if(is_null($options)){ $options = array(); }
-		$php_command = array();
-		array_push( $php_command, addslashes($path_cmd_php) );
-			// ↑ Windows でこれを `escapeshellarg()` でエスケープすると、なぜかエラーに。
-
-		if( strlen($path_cmd_php_ini) ){
-			$php_command = array_merge(
-				$php_command,
-				array(
-					'-c', escapeshellarg($path_cmd_php_ini),// ← php.ini のパス
-				)
-			);
-		}
-
-		// if( strlen(@$this->req()->get_cli_option( '-d' )) ){
-		// 	$php_command = array_merge(
-		// 		$php_command,
-		// 		array(
-		// 			'-d', escapeshellarg(@$this->req()->get_cli_option( '-d' )),// ← php.ini definition
-		// 		)
-		// 	);
-		// }
-
-		array_push($php_command, escapeshellarg( realpath($this->realpath_projectroot_dir.$this->path_entry_script) ));
-		if( @$options['output'] == 'json' ){
-			array_push($php_command, '-o');
-			array_push($php_command, 'json');
-		}
-		if( @strlen($options['user_agent']) ){
-			array_push($php_command, '-u');
-			array_push($php_command, escapeshellarg($options['user_agent']));
-		}
-		array_push($php_command, escapeshellarg($request_path));
-
-
-		$cmd = implode( ' ', $php_command );
-
-		// コマンドを実行
-		chdir($project_dir);
-		ob_start();
-		$proc = proc_open($cmd, array(
-			0 => array('pipe','r'),
-			1 => array('pipe','w'),
-			2 => array('pipe','w'),
-		), $pipes);
-		$io = array();
-		foreach($pipes as $idx=>$pipe){
-			$io[$idx] = null;
-			if( $idx >= 1 ){
-				$io[$idx] = stream_get_contents($pipe);
-			}
-			fclose($pipe);
-		}
-		$return_var = proc_close($proc);
-		ob_get_clean();
-
-		$bin = $io[1]; // stdout
-		if( strlen( $io[2] ) ){
-			// $this->error($io[2]); // stderr
-		}
-
-		if( @$options['output'] == 'json' ){
-			$bin = json_decode($bin);
-		}
-
-		chdir($current_dir);
-		return $bin;
-	} // internal_sub_request()
+		$px2agent = new \picklesFramework2\px2agent\px2agent();
+		$px2proj = $px2agent->createProject( realpath($this->realpath_projectroot_dir.$this->path_entry_script) );
+		return $px2proj->query($request_path, $options);
+	} // execute_px2()
 
 }
