@@ -18,7 +18,7 @@ class setupRequestTest extends PHPUnit_Framework_TestCase{
 	 * セットアップリクエストを保存するテスト
 	 */
 	public function testSavingSetupRequest(){
-		@unlink( __DIR__.'/testdata/bd_data_main/projects/test_pj_fine/setup_request.json' );
+		@unlink( __DIR__.'/testdata/bd_data_main/projects/test_pj_fine/initializing_request.json' );
 		clearstatcache();
 
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
@@ -27,7 +27,7 @@ class setupRequestTest extends PHPUnit_Framework_TestCase{
 		$pj = $burdockProjectManager->project('test_pj_fine');
 		$this->assertSame( is_object($pj), true );
 
-		$setupRequest = $pj->get_setup_request();
+		$setupRequest = $pj->get_initializing_request();
 		$this->assertSame( is_object($setupRequest), true );
 
 		$setupRequest = new \stdClass();
@@ -37,7 +37,7 @@ class setupRequestTest extends PHPUnit_Framework_TestCase{
 		$setupRequest->composer_vendor_name = 'tester';
 		$setupRequest->composer_project_name = 'example';
 
-		$result = $pj->save_setup_request($setupRequest);
+		$result = $pj->save_initializing_request($setupRequest);
 		$this->assertSame( $result, true );
 
 		return;
@@ -51,7 +51,7 @@ class setupRequestTest extends PHPUnit_Framework_TestCase{
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
 		$pj = $burdockProjectManager->project('test_pj_fine');
 
-		$setupRequest = $pj->get_setup_request();
+		$setupRequest = $pj->get_initializing_request();
 		$this->assertSame( is_object($setupRequest), true );
 
 		$this->assertSame( $setupRequest->initializing_method, 'create' );

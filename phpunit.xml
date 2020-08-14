@@ -2,7 +2,7 @@
 	<testsuites>
 		<testsuite name="default">
 			<file>./tests/mainTest.php</file>
-			<file>./tests/setupRequestTest.php</file>
+			<file>./tests/initializingRequestTest.php</file>
 			<file>./tests/cleaningTest.php</file>
 		</testsuite>
 	</testsuites>
