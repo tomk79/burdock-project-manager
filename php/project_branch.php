@@ -32,6 +32,11 @@ class project_branch{
 	private $path_home_dir;
 
 	/**
+	 * プロジェクト情報のキャッシュ
+	 */
+	private $pjInfo;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct( $main, $realpath_projectroot_dir ){
@@ -140,9 +145,7 @@ class project_branch{
 			return $status;
 		}
 
-		$pjInfo = $this->execute_px2('/?PX=px2dthelper.get.all', array(
-			'output' => 'json',
-		));
+		$pjInfo = $this->get_project_info();
 		// var_dump($pjInfo);
 
 		$status->api->version = $pjInfo->check_status->pxfw_api->version;
@@ -177,26 +180,38 @@ class project_branch{
 	}
 
 	/**
+	 * プロジェクト情報を取得する
+	 */
+	public function get_project_info(){
+		if( is_object($this->pjInfo) ){
+			// すでに取得済みだった場合、そのときの値を返す
+			return $this->pjInfo;
+		}
+		$pjInfo = $this->query('/?PX=px2dthelper.get.all', array(
+			'output' => 'json',
+		));
+		$this->pjInfo = $pjInfo;
+		return $this->pjInfo;
+	}
+
+	/**
 	 * Pickles 2 を実行する
 	 *
 	 * @param string $request_path リクエストを発行する対象のパス
 	 * @param array $options Pickles 2 へのコマンド発行時のオプション
-	 * - output = 期待する出力形式。`json` を指定すると、サブリクエストに `-o json` オプションが加えられ、JSON形式で解析済みのオブジェクトが返されます。
+	 * - output = 期待する出力形式。`json` を指定すると、コマンドに `-o json` オプションが加えられ、JSON形式で解析済みのオブジェクトが返されます。
 	 * - user_agent = `HTTP_USER_AGENT` 文字列。 `user_agent` が空白の場合、または文字列 `PicklesCrawler` を含む場合には、パブリッシュツールからのアクセスであるとみなされます。
-	 * @param int &$return_var コマンドの終了コードで上書きされます
-	 * @return mixed サブリクエストの実行結果。
+	 * @return mixed Pickles 2 の実行結果。
 	 * 通常は 得られた標準出力をそのまま文字列として返します。
 	 * `output` オプションに `json` が指定された場合、 `json_decode()` された値が返却されます。
-	 *
-	 * サブリクエストから標準エラー出力を検出した場合、 `$px->error( $stderr )` に転送します。
 	 */
-	private function execute_px2($request_path, $options = null){
+	public function query($request_path, $options = null){
 		if( !strlen($this->path_entry_script) ){
 			$this->status();
 		}
 		$px2agent = new \picklesFramework2\px2agent\px2agent();
 		$px2proj = $px2agent->createProject( realpath($this->realpath_projectroot_dir.$this->path_entry_script) );
 		return $px2proj->query($request_path, $options);
-	} // execute_px2()
+	} // query()
 
 }
