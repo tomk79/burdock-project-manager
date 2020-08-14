@@ -20,11 +20,20 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	 * インスタンス化してみるテスト
 	 */
 	public function testCreateNewInstance(){
-        $burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
 		$this->assertSame( is_object($burdockProjectManager), true );
 
 		$pj = $burdockProjectManager->project('test_pj_fine');
 		$this->assertSame( is_object($pj), true );
+		return;
+	}
+
+	/**
+	 * 正常にセットアップができていて、稼働できる状態のプロジェクトをチェックするテスト
+	 */
+	public function testAvailableBranch(){
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+		$pj = $burdockProjectManager->project('test_pj_fine');
 
 		$status = $pj->branch('master', 'preview')->status();
 		// var_dump($status);
@@ -48,7 +57,39 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertSame( $status->isPxStandby, true );
 		$this->assertSame( $status->gitDirExists, true );
 		$this->assertSame( $status->guiEngineName, "broccoli-html-editor-php" );
-        return;
+		return;
+	}
+
+	/**
+	 * 初期化できていない空白のブランチをチェックするテスト
+	 */
+	public function testEmptyBranch(){
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+		$pj = $burdockProjectManager->project('test_pj_empty');
+
+		$status = $pj->branch('master', 'preview')->status();
+		// var_dump($status);
+		$this->assertSame( is_object($status), true );
+		$this->assertSame( is_object($status->api), true );
+		$this->assertSame( $status->api->available, false );
+		$this->assertSame( $status->api->version, false );
+		$this->assertSame( $status->api->is_sitemap_loaded, false );
+		$this->assertSame( is_object($status->px2dthelper), true );
+		$this->assertSame( $status->px2dthelper->available, false );
+		$this->assertSame( $status->px2dthelper->version, false );
+		$this->assertSame( $status->px2dthelper->is_sitemap_loaded, false );
+		$this->assertSame( $status->pathExists, true ); // プロジェクトのルートディレクトリだけは存在している
+		$this->assertSame( $status->pathContainsFileCount, 1 ); // .gitkeep がリストされるから 1件
+		$this->assertSame( $status->composerJsonExists, false );
+		$this->assertSame( $status->entryScriptExists, false );
+		$this->assertSame( $status->homeDirExists, false );
+		$this->assertSame( $status->confFileExists, false );
+		$this->assertSame( $status->px2DTConfFileExists, false );
+		$this->assertSame( $status->vendorDirExists, false );
+		$this->assertSame( $status->isPxStandby, false );
+		$this->assertSame( $status->gitDirExists, false );
+		$this->assertSame( $status->guiEngineName, null );
+		return;
 	}
 
 }

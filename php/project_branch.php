@@ -44,6 +44,7 @@ class project_branch{
 	 */
 	public function status(){
 
+		// initialize
 		$status = new \stdClass();
 
 		$status->api = new \stdClass();
@@ -58,7 +59,18 @@ class project_branch{
 
 		$status->pathExists = $this->main->fs()->is_dir($this->realpath_projectroot_dir);
 		$status->pathContainsFileCount = false;
+		$status->composerJsonExists = false;
+		$status->entryScriptExists = false;
+		$status->homeDirExists = false;
+		$status->confFileExists = false;
+		$status->px2DTConfFileExists = false;
+		$status->vendorDirExists = false;
+		$status->isPxStandby = false;
+		$status->gitDirExists = false;
+		$status->guiEngineName = null;
 
+
+		// Start
 		if( $status->pathExists ){
 			$status->pathContainsFileCount = 0;
 			$ls = $this->main->fs()->ls($this->realpath_projectroot_dir);
@@ -75,7 +87,6 @@ class project_branch{
 			unset($ls, $basename);
 		}
 
-		$status->composerJsonExists = false;
 		$this->path_entry_script = '.px_execute.php';
 		$this->path_home_dir = 'px-files/';
 		if($status->pathExists && $this->main->fs()->is_file($this->realpath_projectroot_dir.'composer.json')){
@@ -91,14 +102,6 @@ class project_branch{
 				}
 			}catch(Exception $e){}
 		}
-
-		$status->entryScriptExists = false;
-		$status->homeDirExists = false;
-		$status->confFileExists = false;
-		$status->px2DTConfFileExists = false;
-		$status->vendorDirExists = false;
-		$status->isPxStandby = false;
-		$status->gitDirExists = false;
 
 		if( $status->pathExists ){
 			if($this->main->fs()->is_file($this->realpath_projectroot_dir.$this->path_entry_script)){
@@ -128,6 +131,14 @@ class project_branch{
 			}
 		}
 
+
+		if(
+			!$status->isPxStandby
+		){
+			// この時点で条件を満たしていなければ、
+			// PXコマンドを実行できないと判断する。
+			return $status;
+		}
 
 		$pjInfo = $this->execute_px2('/?PX=px2dthelper.get.all', array(
 			'output' => 'json',
