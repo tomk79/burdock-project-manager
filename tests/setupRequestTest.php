@@ -31,11 +31,11 @@ class setupRequestTest extends PHPUnit_Framework_TestCase{
 		$this->assertSame( is_object($setupRequest), true );
 
 		$setupRequest = new \stdClass();
+		$setupRequest->initializing_method = 'create';
 		$setupRequest->git_remote = null;
 		$setupRequest->git_user_name = null;
-		$setupRequest->git_password = null;
-		$setupRequest->composer_vendor_name = null;
-		$setupRequest->composer_project_name = null;
+		$setupRequest->composer_vendor_name = 'tester';
+		$setupRequest->composer_project_name = 'example';
 
 		$result = $pj->save_setup_request($setupRequest);
 		$this->assertSame( $result, true );
@@ -54,11 +54,11 @@ class setupRequestTest extends PHPUnit_Framework_TestCase{
 		$setupRequest = $pj->get_setup_request();
 		$this->assertSame( is_object($setupRequest), true );
 
+		$this->assertSame( $setupRequest->initializing_method, 'create' );
 		$this->assertSame( $setupRequest->git_remote, null );
 		$this->assertSame( $setupRequest->git_user_name, null );
-		$this->assertSame( $setupRequest->git_password, null );
-		$this->assertSame( $setupRequest->composer_vendor_name, null );
-		$this->assertSame( $setupRequest->composer_project_name, null );
+		$this->assertSame( $setupRequest->composer_vendor_name, 'tester' );
+		$this->assertSame( $setupRequest->composer_project_name, 'example' );
 
 		return;
 	}

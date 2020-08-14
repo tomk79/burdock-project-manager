@@ -57,9 +57,9 @@ class project{
 		$realpath_json = $this->realpath_bd_data.'projects/'.urlencode($this->project_id).'/setup_request.json';
 		if( !is_file($realpath_json) || !is_readable($realpath_json) ){
 			$json = new \stdClass();
+			$json->initializing_method = null;
 			$json->git_remote = null;
 			$json->git_user_name = null;
-			$json->git_password = null;
 			$json->composer_vendor_name = null;
 			$json->composer_project_name = null;
 			return $json;
