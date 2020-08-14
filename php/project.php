@@ -56,7 +56,13 @@ class project{
 	public function get_setup_request(){
 		$realpath_json = $this->realpath_bd_data.'projects/'.urlencode($this->project_id).'/setup_request.json';
 		if( !is_file($realpath_json) || !is_readable($realpath_json) ){
-			return false;
+			$json = new \stdClass();
+			$json->git_remote = null;
+			$json->git_user_name = null;
+			$json->git_password = null;
+			$json->composer_vendor_name = null;
+			$json->composer_project_name = null;
+			return $json;
 		}
 		$json_string = file_get_contents($realpath_json);
 		$json = json_decode($json_string);

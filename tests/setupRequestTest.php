@@ -28,7 +28,7 @@ class setupRequestTest extends PHPUnit_Framework_TestCase{
 		$this->assertSame( is_object($pj), true );
 
 		$setupRequest = $pj->get_setup_request();
-		$this->assertSame( $setupRequest, false );
+		$this->assertSame( is_object($setupRequest), true );
 
 		$setupRequest = new \stdClass();
 		$setupRequest->git_remote = null;
