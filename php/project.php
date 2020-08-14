@@ -50,4 +50,36 @@ class project{
 		return $branch;
 	}
 
+	/**
+	 * セットアップ時の要求内容を取得する
+	 */
+	public function get_setup_request(){
+		$realpath_json = $this->realpath_bd_data.'projects/'.urlencode($this->project_id).'/setup_request.json';
+		if( !is_file($realpath_json) || !is_readable($realpath_json) ){
+			return false;
+		}
+		$json_string = file_get_contents($realpath_json);
+		$json = json_decode($json_string);
+		return $json;
+	}
+
+
+	/**
+	 * セットアップ時の要求内容を取得する
+	 */
+	public function save_setup_request($json){
+		if( !is_object($json) && !is_array($json) ){
+			return false;
+		}
+
+		$realpath_json = $this->realpath_bd_data.'projects/'.urlencode($this->project_id).'/setup_request.json';
+		if( !is_dir( dirname($realpath_json) ) ){
+			$this->main->fs()->mkdir_r(dirname($realpath_json));
+		}
+
+		$json_string = json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		$result = $this->main->fs()->save_file($realpath_json, $json_string);
+		return $result;
+	}
+
 }
