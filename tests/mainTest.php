@@ -92,4 +92,38 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		return;
 	}
 
+	/**
+	 * アプリケーションロックのテスト
+	 */
+	public function testAppLock(){
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+
+		$appname = 'testapp';
+		$this->assertSame( $burdockProjectManager->is_locked($appname), false );
+		$this->assertSame( $burdockProjectManager->lock($appname), true );
+		$this->assertSame( $burdockProjectManager->lock($appname), false );
+		$this->assertSame( $burdockProjectManager->is_locked($appname), true );
+		$this->assertSame( $burdockProjectManager->is_locked('not_'.$appname), false );
+		$this->assertSame( $burdockProjectManager->unlock($appname), true );
+		$this->assertSame( $burdockProjectManager->unlock($appname), false );
+		return;
+	}
+
+	/**
+	 * アプリケーションロック(プロジェクト別)のテスト
+	 */
+	public function testProjectAppLock(){
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+		$pj = $burdockProjectManager->project('test_pj_fine');
+
+		$appname = 'testapp';
+		$this->assertSame( $pj->is_locked($appname), false );
+		$this->assertSame( $pj->lock($appname), true );
+		$this->assertSame( $pj->lock($appname), false );
+		$this->assertSame( $pj->is_locked($appname), true );
+		$this->assertSame( $pj->is_locked('not_'.$appname), false );
+		$this->assertSame( $pj->unlock($appname), true );
+		$this->assertSame( $pj->unlock($appname), false );
+		return;
+	}
 }
