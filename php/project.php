@@ -183,4 +183,38 @@ class project{
 
 		return touch( $lockfilepath );
 	} // touch_lockfile()
+
+	/**
+	 * プロジェクトの関連ディレクトリを削除する
+	 */
+	public function delete(){
+
+		$path_repositories_dir = $this->realpath_bd_data.'/repositories/';
+		$files = $this->main->fs()->ls($path_repositories_dir);
+		if( !$files ){
+			$files = array();
+		}
+		foreach( $files as $basename ){
+			if( preg_match( '/^'.preg_quote($this->project_id, '/').'\-\-\-(?:[\S]+)$/is', $basename ) ){
+				if( !$this->main->fs()->rm( $path_repositories_dir.'/'.$basename ) ){
+					return false;
+				}
+			}
+		}
+		$path_stagings_dir = $this->realpath_bd_data.'/stagings/';
+		$files = $this->main->fs()->ls($path_stagings_dir);
+		if( !$files ){
+			$files = array();
+		}
+		foreach( $files as $basename ){
+			if( preg_match( '/^'.preg_quote($this->project_id, '/').'\-\-\-(?:[\S]+)$/is', $basename ) ){
+				if( !$this->main->fs()->rm( $path_stagings_dir.'/'.$basename ) ){
+					return false;
+				}
+			}
+		}
+
+		$path_main_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/';
+		return $this->main->fs()->rm( $path_main_dir );
+	}
 }
