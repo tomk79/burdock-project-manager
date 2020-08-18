@@ -96,7 +96,7 @@ class project{
 	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function lock( $app_name, $expire = 60 ){
-		$lockfilepath = $this->realpath_bd_data.'/projects/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/applock/'.urlencode($app_name).'.lock.txt';
 		$timeout_limit = 5;
 
 		if( !is_dir( dirname( $lockfilepath ) ) ){
@@ -135,7 +135,7 @@ class project{
 	 * @return bool ロック中の場合に `true`、それ以外の場合に `false` を返します。
 	 */
 	public function is_locked( $app_name, $expire = 60 ){
-		$lockfilepath = $this->realpath_bd_data.'/projects/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/applock/'.urlencode($app_name).'.lock.txt';
 		$lockfile_expire = $expire;
 
 		// PHPのFileStatusCacheをクリア
@@ -158,7 +158,7 @@ class project{
 	 * @return bool ロック解除成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function unlock( $app_name ){
-		$lockfilepath = $this->realpath_bd_data.'/projects/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/applock/'.urlencode($app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();
@@ -173,7 +173,7 @@ class project{
 	 * @return bool 成功時に `true`、失敗時に `false` を返します。
 	 */
 	public function touch_lockfile( $app_name ){
-		$lockfilepath = $this->realpath_bd_data.'/projects/applock/'.urlencode($app_name).'.lock.txt';
+		$lockfilepath = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/applock/'.urlencode($app_name).'.lock.txt';
 
 		// PHPのFileStatusCacheをクリア
 		clearstatcache();

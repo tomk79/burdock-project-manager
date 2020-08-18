@@ -68,6 +68,26 @@ class main{
 	}
 
 	/**
+	 * プロジェクトの一覧を取得する
+	 *
+	 * このメソッドが返すのは、 `<BD_DATA_DIR>/projects/` の直下にあるディレクトリ名の一覧です。
+	 */
+	public function get_project_list(){
+		$ls = $this->fs()->ls($this->realpath_bd_data.'projects/');
+		$rtn = array();
+		foreach($ls as $basename){
+			if( !strlen($basename) ){
+				continue;
+			}
+			if( !is_dir($this->realpath_bd_data.'projects/'.$basename) ){
+				continue;
+			}
+			array_push($rtn, $basename);
+		}
+		return $rtn;
+	}
+
+	/**
 	 * アプリケーションロックする。
 	 *
 	 * @param string $app_name アプリケーションロック名
