@@ -196,6 +196,7 @@ class project{
 		}
 		foreach( $files as $basename ){
 			if( preg_match( '/^'.preg_quote($this->project_id, '/').'\-\-\-(?:[\S]+)$/is', $basename ) ){
+				$this->main->fs()->chmod_r($path_repositories_dir.'/'.$basename, 0777, 0777);
 				if( !$this->main->fs()->rm( $path_repositories_dir.'/'.$basename ) ){
 					return false;
 				}
@@ -208,6 +209,7 @@ class project{
 		}
 		foreach( $files as $basename ){
 			if( preg_match( '/^'.preg_quote($this->project_id, '/').'\-\-\-(?:[\S]+)$/is', $basename ) ){
+				$this->main->fs()->chmod_r($path_stagings_dir.'/'.$basename, 0777, 0777);
 				if( !$this->main->fs()->rm( $path_stagings_dir.'/'.$basename ) ){
 					return false;
 				}
@@ -215,6 +217,7 @@ class project{
 		}
 
 		$path_main_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/';
+		$this->main->fs()->chmod_r($path_main_dir, 0777, 0777);
 		return $this->main->fs()->rm( $path_main_dir );
 	}
 }
