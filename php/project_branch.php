@@ -148,20 +148,28 @@ class project_branch{
 		$pjInfo = $this->get_project_info();
 		// var_dump($pjInfo);
 
-		$status->api->version = $pjInfo->check_status->pxfw_api->version;
-		$status->api->available = ($pjInfo->check_status->pxfw_api->version ? true : false);
-		$status->api->is_sitemap_loaded = $pjInfo->check_status->pxfw_api->is_sitemap_loaded;
+		if( is_object($pjInfo) && is_object($pjInfo->check_status) ){
+			if( is_object($pjInfo->check_status->pxfw_api) ){
+				$status->api->version = $pjInfo->check_status->pxfw_api->version;
+				$status->api->available = ($pjInfo->check_status->pxfw_api->version ? true : false);
+				$status->api->is_sitemap_loaded = $pjInfo->check_status->pxfw_api->is_sitemap_loaded;
+			}
+			if( is_object($pjInfo->check_status->px2dthelper) ){
+				$status->px2dthelper->version = $pjInfo->check_status->px2dthelper->version;
+				$status->px2dthelper->available = ($pjInfo->check_status->px2dthelper->version ? true : false);
+				$status->px2dthelper->is_sitemap_loaded = $pjInfo->check_status->px2dthelper->is_sitemap_loaded;
+			}
+		}
 
-		$status->px2dthelper->version = $pjInfo->check_status->px2dthelper->version;
-		$status->px2dthelper->available = ($pjInfo->check_status->px2dthelper->version ? true : false);
-		$status->px2dthelper->is_sitemap_loaded = $pjInfo->check_status->px2dthelper->is_sitemap_loaded;
 
-
-		$_config = $pjInfo->config;
+		$_config = false;
 		$_px2DTConfig = false;
-		if( $_config->plugins && $_config->plugins->px2dt ){
-			$_px2DTConfig = $_config->plugins->px2dt;
-			$status->px2DTConfFileExists = true;
+		if( is_object($pjInfo) && is_object($pjInfo->config) ){
+			$_config = $pjInfo->config;
+			if( $_config->plugins && $_config->plugins->px2dt ){
+				$_px2DTConfig = $_config->plugins->px2dt;
+				$status->px2DTConfFileExists = true;
+			}
 		}
 
 		$status->guiEngineName = 'broccoli-html-editor';

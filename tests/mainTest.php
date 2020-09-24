@@ -11,10 +11,21 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->fs = new tomk79\filesystem();
 		require_once(__DIR__.'/helper/commander.php');
 		$this->helper_commander = new test_helper_commander();
-		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine---master/', 'composer install');
-		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine---master/', 'git init');
 	}
 
+
+	/**
+	 * テストデータの整理
+	 */
+	public function testInitializeTestData(){
+		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine---master/', 'composer update');
+		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine---master/', 'git init');
+
+		clearstatcache();
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine---master/vendor/'), true );
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine---master/.git/'), true );
+		return;
+	}
 
 	/**
 	 * インスタンス化してみるテスト
