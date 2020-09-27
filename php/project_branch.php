@@ -44,6 +44,14 @@ class project_branch{
 		$this->realpath_projectroot_dir = $realpath_projectroot_dir;
 	}
 
+
+	/**
+	 * realpath_projectroot_dir を取得する
+	 */
+	public function get_realpath_projectroot_dir(){
+		return $this->realpath_projectroot_dir;
+	}
+
 	/**
 	 * 環境個別の状態チェック
 	 */
