@@ -121,7 +121,7 @@ class main{
 		}
 		$src = '';
 		$src .= 'ProcessID='.getmypid()."\r\n";
-		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+		$src .= date( 'Y-m-d H:i:s' , time() )."\r\n";
 		$RTN = $this->fs()->save_file( $lockfilepath , $src );
 		return	$RTN;
 	} // lock()

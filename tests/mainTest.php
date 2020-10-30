@@ -94,6 +94,24 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
+	 * ブランチの一時データディレクトリの取得テスト
+	 */
+	public function testProjectBranchTemporaryDataDir(){
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+		$pj = $burdockProjectManager->project('test_pj_fine');
+		$branch = $pj->branch('master', 'preview');
+
+		$realpath_dir = $branch->get_temporary_data_dir('test1/test2');
+
+		$this->assertSame( !!strlen($realpath_dir), true );
+		$this->assertSame( !!is_dir($realpath_dir), true );
+
+		// clearning
+		$this->assertSame( !!rmdir($realpath_dir), true );
+		return;
+	}
+
+	/**
 	 * プロジェクト一覧を取得するテスト
 	 */
 	public function testGetProjectList(){

@@ -246,6 +246,30 @@ class project_branch{
 		return $px2proj->query($request_path, $options);
 	} // query()
 
+
+	/**
+	 * アプリケーションロックする。
+	 *
+	 * @param string $data_dir_name データディレクトリ名
+	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
+	 */
+	public function get_temporary_data_dir( $data_dir_name = null ){
+		if( !strlen($data_dir_name) ){
+			$data_dir_name = 'default';
+		}
+		$realpath_temporary_data_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/branches/'.urlencode($this->branch_name).'/temporary_data/'.urlencode($data_dir_name).'/';
+		$realpath_temporary_data_dir = $this->main->fs()->get_realpath( $realpath_temporary_data_dir );
+
+		if( !$this->main->fs()->is_dir($realpath_temporary_data_dir) ){
+			if( !$this->main->fs()->mkdir_r($realpath_temporary_data_dir) ){
+				return false;
+			}
+		}
+
+		return $realpath_temporary_data_dir;
+	}
+
+
 	/**
 	 * アプリケーションロックする。
 	 *
@@ -280,7 +304,7 @@ class project_branch{
 		}
 		$src = '';
 		$src .= 'ProcessID='.getmypid()."\r\n";
-		$src .= @date( 'Y-m-d H:i:s' , time() )."\r\n";
+		$src .= date( 'Y-m-d H:i:s' , time() )."\r\n";
 		$RTN = $this->main->fs()->save_file( $lockfilepath , $src );
 		return	$RTN;
 	} // lock()
