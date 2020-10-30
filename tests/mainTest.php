@@ -75,6 +75,25 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	}
 
 	/**
+	 * アプリケーションロック(ブランチ別)のテスト
+	 */
+	public function testProjectBranchAppLock(){
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+		$pj = $burdockProjectManager->project('test_pj_fine');
+		$branch = $pj->branch('master', 'preview');
+
+		$appname = 'testapp';
+		$this->assertSame( $branch->is_locked($appname), false );
+		$this->assertSame( $branch->lock($appname), true );
+		$this->assertSame( $branch->lock($appname), false );
+		$this->assertSame( $branch->is_locked($appname), true );
+		$this->assertSame( $branch->is_locked('not_'.$appname), false );
+		$this->assertSame( $branch->unlock($appname), true );
+		$this->assertSame( $branch->unlock($appname), false );
+		return;
+	}
+
+	/**
 	 * プロジェクト一覧を取得するテスト
 	 */
 	public function testGetProjectList(){

@@ -46,7 +46,7 @@ class project{
 			return false;
 		}
 
-		$branch = new project_branch($this->main, $realpath_projectroot_dir);
+		$branch = new project_branch($this->main, $realpath_projectroot_dir, $this->realpath_bd_data, $this->project_id, $branch_name, $division);
 		return $branch;
 	}
 
