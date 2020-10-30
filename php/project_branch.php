@@ -251,7 +251,7 @@ class project_branch{
 	 * アプリケーションロックする。
 	 *
 	 * @param string $data_dir_name データディレクトリ名
-	 * @return bool ロック成功時に `true`、失敗時に `false` を返します。
+	 * @return string ディレクトリのパスを返します。
 	 */
 	public function get_temporary_data_dir( $data_dir_name = null ){
 		if( !strlen($data_dir_name) ){

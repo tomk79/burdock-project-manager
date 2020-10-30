@@ -20,7 +20,7 @@ $project_status = $burdockProjectManager->project('project_id')->branch('master'
 
 ## 更新履歴 - Change log
 
-### tomk79/burdock-project-manager v0.0.1 (リリース日未定)
+### tomk79/burdock-project-manager v0.0.1 (2020年10月30日)
 
 - Initial Release.
 
