@@ -36,7 +36,7 @@ class project{
 		$realpath_projectroot_dir = false;
 		switch( strtolower($division) ){
 			case 'preview':
-				$realpath_projectroot_dir = $this->realpath_bd_data.'repositories/'.urlencode($this->project_id).'---'.urlencode($branch_name).'/';
+				$realpath_projectroot_dir = $this->realpath_bd_data.'repositories/'.urlencode($this->project_id).'----'.urlencode($branch_name).'/';
 				break;
 			case 'staging':
 				$realpath_projectroot_dir = $this->realpath_bd_data.'stagings/'.urlencode($this->project_id).'---'.urlencode($branch_name).'/';
@@ -195,7 +195,7 @@ class project{
 			$files = array();
 		}
 		foreach( $files as $basename ){
-			if( preg_match( '/^'.preg_quote($this->project_id, '/').'\-\-\-(?:[\S]+)$/is', $basename ) ){
+			if( preg_match( '/^'.preg_quote($this->project_id, '/').'\-\-\-\-(?:[\S]+)$/is', $basename ) ){
 				$this->main->fs()->chmod_r($path_repositories_dir.'/'.$basename, 0777, 0777);
 				if( !$this->main->fs()->rm( $path_repositories_dir.'/'.$basename ) ){
 					return false;

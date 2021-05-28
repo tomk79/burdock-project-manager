@@ -20,6 +20,10 @@ $project_status = $burdockProjectManager->project('project_id')->branch('master'
 
 ## 更新履歴 - Change log
 
+### tomk79/burdock-project-manager v0.1.0 (リリース日未定)
+
+- プレビュー環境ディレクトリの区切り文字を、ハイフン3つからハイフン4つに変更した。
+
 ### tomk79/burdock-project-manager v0.0.1 (2020年10月30日)
 
 - Initial Release.
@@ -27,7 +31,7 @@ $project_status = $burdockProjectManager->project('project_id')->branch('master'
 
 ## ライセンス - License
 
-Copyright (c)2020 Tomoya Koyanagi, and Pickles Project<br />
+Copyright (c)2021 Tomoya Koyanagi, and Pickles Project<br />
 MIT License https://opensource.org/licenses/mit-license.php
 
 

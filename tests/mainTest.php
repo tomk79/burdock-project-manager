@@ -18,12 +18,12 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	 * テストデータの整理
 	 */
 	public function testInitializeTestData(){
-		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine---master/', 'composer update');
-		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine---master/', 'git init');
+		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine----master/', 'composer update');
+		$this->helper_commander->execute('testdata/bd_data_main/repositories/test_pj_fine----master/', 'git init');
 
 		clearstatcache();
-		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine---master/vendor/'), true );
-		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine---master/.git/'), true );
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine----master/vendor/'), true );
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine----master/.git/'), true );
 		return;
 	}
 
@@ -192,8 +192,8 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	 */
 	public function testDeleteProject(){
 		$this->fs->mkdir_r(__DIR__.'/testdata/bd_data_main/projects/test_pj_delete');
-		$this->fs->mkdir_r(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete---master');
-		$this->fs->mkdir_r(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete---develop');
+		$this->fs->mkdir_r(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete----master');
+		$this->fs->mkdir_r(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete----develop');
 		$this->fs->mkdir_r(__DIR__.'/testdata/bd_data_main/stagings/test_pj_delete---stg1');
 		$this->fs->mkdir_r(__DIR__.'/testdata/bd_data_main/stagings/test_pj_delete---stg2');
 		clearstatcache();
@@ -204,13 +204,13 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertSame( $project->delete(), true );
 		clearstatcache();
 		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/projects/test_pj_delete'), false );
-		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete---master'), false );
-		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete---develop'), false );
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete----master'), false );
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_delete----develop'), false );
 		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/stagings/test_pj_delete---stg1'), false );
 		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/stagings/test_pj_delete---stg2'), false );
 
-		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_empty---master'), true );
-		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine---master'), true );
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_empty----master'), true );
+		$this->assertSame( is_dir(__DIR__.'/testdata/bd_data_main/repositories/test_pj_fine----master'), true );
 		return;
 	}
 

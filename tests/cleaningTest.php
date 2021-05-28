@@ -15,7 +15,7 @@ class clearingTest extends PHPUnit_Framework_TestCase{
 	 * 後処理
 	 */
 	public function testClearing(){
-		$this->assertSame( $this->fs->rm( __DIR__.'/testdata/bd_data_main/repositories/test_pj_fine---master/.git/' ), true );
+		$this->assertSame( $this->fs->rm( __DIR__.'/testdata/bd_data_main/repositories/test_pj_fine----master/.git/' ), true );
         return;
 	}
 
