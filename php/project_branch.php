@@ -226,6 +226,17 @@ class project_branch{
 		return $this->pjInfo;
 	}
 
+
+	/**
+	 * EntryScriptパスを取得
+	 */
+	public function get_entry_script(){
+		if( !strlen($this->path_entry_script) ){
+			$this->status();
+		}
+		return $this->path_entry_script;
+	}
+
 	/**
 	 * Pickles 2 を実行する
 	 *
