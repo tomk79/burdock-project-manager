@@ -219,11 +219,13 @@ class project_branch{
 			// すでに取得済みだった場合、そのときの値を返す
 			return $this->pjInfo;
 		}
-		$pjInfo = $this->query('/?PX=px2dthelper.get.all', array(
+		if( $this->is_cache('project_info', $this->pjInfo) ){
+			return $this->cache('project_info');
+		}
+		$this->pjInfo = $this->query('/?PX=px2dthelper.get.all', array(
 			'output' => 'json',
 		));
-		$this->pjInfo = $pjInfo;
-		return $this->pjInfo;
+		return $this->cache('project_info', $this->pjInfo);
 	}
 
 
@@ -278,6 +280,67 @@ class project_branch{
 		}
 
 		return $realpath_temporary_data_dir;
+	}
+
+
+	/**
+	 * 値をキャッシュする。
+	 *
+	 * また、キャッシュが存在するときは、キャッシュされた値を返す。
+	 */
+	public function cache( $cache_name, $value = null ){
+		$realpath_cache_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/branches/'.urlencode($this->branch_name).'/caches/';
+		if( !$this->main->fs()->is_dir( $realpath_cache_dir ) ){
+			$this->main->fs()->mkdir_r( $realpath_cache_dir );
+		}
+		$realpath_cache_file = $realpath_cache_dir.urlencode($cache_name);
+		clearstatcache();
+		if( $this->main->fs()->is_file( $realpath_cache_file ) ){
+			return include( $realpath_cache_file );
+		}
+
+		if( !is_object( $value ) && !is_array( $value ) ){
+			return false;
+		}
+
+		$src = '';
+		$src .= '<'.'?php'."\n";
+		$src .= '// cache created: '.date('Y-m-d H:i:s')."\n";
+		$src .= 'return ';
+		$src .= var_export( $value, true );
+		$src .= ';'."\n";
+		$src .= '?'.'>';
+		$this->main->fs()->save_file( $realpath_cache_file, $src );
+
+		return $value;
+	}
+
+	/**
+	 * キャッシュされているか調べる。
+	 *
+	 * @return boolean キャッシュされている場合に `true`、 それ以外の時に `false` を返します。
+	 */
+	public function is_cache( $cache_name ){
+		$realpath_cache_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/branches/'.urlencode($this->branch_name).'/caches/';
+		$realpath_cache_file = $realpath_cache_dir.urlencode($cache_name);
+		clearstatcache();
+		return $this->main->fs()->is_file( $realpath_cache_file );
+	}
+
+	/**
+	 * キャッシュを消去する。
+	 *
+	 * ブランチ単位で持っているキャッシュをすべて削除する。
+	 *
+	 * @return boolean 成功時に `true`、 失敗時に `false` を返します。
+	 */
+	public function clearcache(){
+		$realpath_cache_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/branches/'.urlencode($this->branch_name).'/caches/';
+		$result = true;
+		if( $this->main->fs()->is_dir( $realpath_cache_dir ) ){
+			$result = $this->main->fs()->rm( $realpath_cache_dir );
+		}
+		return $result;
 	}
 
 

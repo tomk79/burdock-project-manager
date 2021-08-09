@@ -71,7 +71,7 @@ class project{
 
 
 	/**
-	 * セットアップ時の要求内容を取得する
+	 * セットアップ時の要求内容を保存する
 	 */
 	public function save_initializing_request($json){
 		if( !is_object($json) && !is_array($json) ){

@@ -129,8 +129,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 	public function testAvailableBranch(){
 		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
 		$pj = $burdockProjectManager->project('test_pj_fine');
+		$branch = $pj->branch('master', 'preview');
 
-		$status = $pj->branch('master', 'preview')->status();
+		$status = $branch->status();
 		// var_dump($status);
 		$this->assertSame( is_object($status), true );
 		$this->assertSame( is_object($status->api), true );
@@ -152,6 +153,9 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertSame( $status->isPxStandby, true );
 		$this->assertSame( $status->gitDirExists, true );
 		$this->assertSame( $status->guiEngineName, "broccoli-html-editor-php" );
+
+		// キャッシュを消去
+		$this->assertTrue( $branch->clearcache() );
 		return;
 	}
 
