@@ -219,13 +219,14 @@ class project_branch{
 			// すでに取得済みだった場合、そのときの値を返す
 			return $this->pjInfo;
 		}
-		if( $this->is_cache('project_info', $this->pjInfo) ){
-			return $this->cache('project_info');
+		$cache_name = '__project_info';
+		if( $this->is_cache($cache_name, $this->pjInfo) ){
+			return $this->cache($cache_name);
 		}
 		$this->pjInfo = $this->query('/?PX=px2dthelper.get.all', array(
 			'output' => 'json',
 		));
-		return $this->cache('project_info', $this->pjInfo);
+		return $this->cache($cache_name, $this->pjInfo);
 	}
 
 
@@ -295,7 +296,7 @@ class project_branch{
 		}
 		$realpath_cache_file = $realpath_cache_dir.urlencode($cache_name);
 		clearstatcache();
-		if( $this->main->fs()->is_file( $realpath_cache_file ) ){
+		if( $this->is_cache( $cache_name ) && $this->main->fs()->is_file( $realpath_cache_file ) ){
 			return include( $realpath_cache_file );
 		}
 
@@ -324,7 +325,16 @@ class project_branch{
 		$realpath_cache_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/branches/'.urlencode($this->branch_name).'/caches/';
 		$realpath_cache_file = $realpath_cache_dir.urlencode($cache_name);
 		clearstatcache();
-		return $this->main->fs()->is_file( $realpath_cache_file );
+		if( !$this->main->fs()->is_file( $realpath_cache_file ) ){
+			return false;
+		}
+		$mtime = filemtime( $realpath_cache_file );
+		$now = time();
+		$exp = 6 * 60 * 60; // キャッシュの存続期間(秒)
+		if( $mtime < $now - $exp ){
+			return false;
+		}
+		return true;
 	}
 
 	/**
