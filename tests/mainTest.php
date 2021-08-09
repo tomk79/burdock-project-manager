@@ -155,7 +155,27 @@ class mainTest extends PHPUnit_Framework_TestCase{
 		$this->assertSame( $status->guiEngineName, "broccoli-html-editor-php" );
 
 		// キャッシュを消去
+		$this->assertTrue( $branch->is_cache('__project_info') );
 		$this->assertTrue( $branch->clearcache() );
+		$this->assertFalse( $branch->is_cache('__project_info') );
+		return;
+	}
+
+	/**
+	 * 正常なプロジェクトのCCE情報を取得するテスト
+	 */
+	public function testAvailableBranchGetCce(){
+		$burdockProjectManager = new \tomk79\picklesFramework2\burdock\projectManager\main( __DIR__.'/testdata/bd_data_main' );
+		$pj = $burdockProjectManager->project('test_pj_fine');
+		$branch = $pj->branch('master', 'preview');
+
+		$cce = $branch->get_cce_info();
+		$this->assertSame( is_object($cce), true );
+
+		// キャッシュを消去
+		$this->assertTrue( $branch->is_cache('__cce_info') );
+		$this->assertTrue( $branch->clearcache() );
+		$this->assertFalse( $branch->is_cache('__cce_info') );
 		return;
 	}
 

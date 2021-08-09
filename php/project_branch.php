@@ -36,6 +36,11 @@ class project_branch{
 	 */
 	private $pjInfo;
 
+	/**
+	 * CCE情報のキャッシュ
+	 */
+	private $cceInfo;
+
 	/** プロジェクトID */
 	private $realpath_bd_data;
 
@@ -231,6 +236,25 @@ class project_branch{
 
 
 	/**
+	 * Custom Console Extensions 情報を取得する
+	 */
+	public function get_cce_info(){
+		if( is_object($this->cceInfo) ){
+			// すでに取得済みだった場合、そのときの値を返す
+			return $this->cceInfo;
+		}
+		$cache_name = '__cce_info';
+		if( $this->is_cache($cache_name, $this->cceInfo) ){
+			return $this->cache($cache_name);
+		}
+		$this->cceInfo = $this->query('/?PX=px2dthelper.custom_console_extensions', array(
+			'output' => 'json',
+		));
+		return $this->cache($cache_name, $this->cceInfo);
+	}
+
+
+	/**
 	 * EntryScriptパスを取得
 	 */
 	public function get_entry_script(){
@@ -285,9 +309,16 @@ class project_branch{
 
 
 	/**
-	 * 値をキャッシュする。
+	 * 値をキャッシュする。また、キャッシュが存在するときは、キャッシュされた値を返す。
 	 *
-	 * また、キャッシュが存在するときは、キャッシュされた値を返す。
+	 * `$cache_name` をファイル名として、`$value` をキャッシュファイルに保存します。
+	 * `$cache_name` は、内部からの利用時には、先頭を `_` で始まる名前を使用します。
+	 * 外部から利用する場合は `_` 以外の文字(英字を推奨)で始まる名前を使用してください。
+	 *
+	 * @param string $cache_name キャッシュファイル名。
+	 * 内部からの利用時は先頭を `_` で始まる名前を使用、外部から利用する場合は `_` 以外の文字(英字を推奨)で始まる名前を使用する。
+	 * @param object|array $value 保存する値。
+	 * @return object|array キャッシュされた値。
 	 */
 	public function cache( $cache_name, $value = null ){
 		$realpath_cache_dir = $this->realpath_bd_data.'/projects/'.urlencode($this->project_id).'/branches/'.urlencode($this->branch_name).'/caches/';
