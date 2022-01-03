@@ -20,7 +20,7 @@ $project_status = $burdockProjectManager->project('project_id')->branch('master'
 
 ## 更新履歴 - Change log
 
-### tomk79/burdock-project-manager v0.1.2 (リリース日未定)
+### tomk79/burdock-project-manager v0.1.2 (2022年1月3日)
 
 - `$branch->get_project_info()` の結果をキャッシュするようになった。
 - `$branch->get_cce_info()` を追加。
