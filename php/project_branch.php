@@ -279,7 +279,10 @@ class project_branch{
 		if( !strlen($this->path_entry_script) ){
 			$this->status();
 		}
-		$px2agent = new \picklesFramework2\px2agent\px2agent();
+		$px2agent = new \picklesFramework2\px2agent\px2agent(array(
+			'bin' => $this->main->conf('php'),
+			'ini' => $this->main->conf('php_ini'),
+		));
 		$px2proj = $px2agent->createProject( realpath($this->realpath_projectroot_dir.$this->path_entry_script) );
 		return $px2proj->query($request_path, $options);
 	} // query()
